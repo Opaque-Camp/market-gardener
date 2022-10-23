@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.plugin.Plugin
 
 class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
@@ -25,7 +25,7 @@ class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
         if (damager !is Player || damager.velocity.length() < MIN_MARKET_GARDENING_VELOCITY) {
             return false
         }
-        return damager.inventory.itemInMainHand.isMarketGardener
+        return damager.inventory.itemInMainHand.itemMeta.isMarketGardener
     }
 
     private companion object {
@@ -33,8 +33,11 @@ class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
     }
 }
 
-val ItemStack.isMarketGardener: Boolean
+val ItemMeta?.isMarketGardener: Boolean
     get() {
-        val weaponName = if (itemMeta.hasDisplayName()) itemMeta.asString else ""
+        if (this == null) {
+            return false
+        }
+        val weaponName = if (hasDisplayName()) asString else ""
         return weaponName.lowercase().contains("\"market gardener\"")
     }

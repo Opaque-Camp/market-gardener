@@ -19,9 +19,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    implementation 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    testImplementation 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 }
 
 def targetJavaVersion = 17
