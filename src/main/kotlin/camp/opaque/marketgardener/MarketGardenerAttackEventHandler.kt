@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin
 class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
     @EventHandler
     fun onAttack(event: EntityDamageByEntityEvent) {
-        if (!isDamagerAFastFlyingPlayerWithMarketGardener(event))
+        if (!isValidMarketGardenerHit(event))
             return
         event.damage *= 3
         repeat(3) {
@@ -20,13 +20,15 @@ class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
         CriticalHitLabel(plugin).spawnAt(event.entity)
     }
 
-    private fun isDamagerAFastFlyingPlayerWithMarketGardener(event: EntityDamageByEntityEvent): Boolean {
-        val damager = event.damager
-        if (damager !is Player || damager.velocity.length() < MIN_MARKET_GARDENING_VELOCITY) {
+    private fun isValidMarketGardenerHit(event: EntityDamageByEntityEvent): Boolean {
+        val damager = event.damager as? Player
+        if (damager == null || !isAttackerFastEnough(damager)) {
             return false
         }
         return damager.inventory.itemInMainHand.itemMeta.isMarketGardener
     }
+
+    private fun isAttackerFastEnough(damager: Player) = damager.velocity.length() >= MIN_MARKET_GARDENING_VELOCITY
 
     private companion object {
         const val MIN_MARKET_GARDENING_VELOCITY = 0.75
