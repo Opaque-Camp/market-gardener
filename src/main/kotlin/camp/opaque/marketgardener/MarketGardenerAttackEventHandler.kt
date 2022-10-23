@@ -6,18 +6,20 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.plugin.Plugin
 
-class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
+class MarketGardenerAttackEventHandler(
+    private val soundPlayer: SoundPlayer,
+    private val criticalHitLabelFactory: CriticalHitLabelFactory
+) : Listener {
     @EventHandler
     fun onAttack(event: EntityDamageByEntityEvent) {
         if (!isValidMarketGardenerHit(event))
             return
         event.damage *= 3
         repeat(3) {
-            event.entity.world.playSound(event.entity, Sound.BLOCK_BELL_USE, 3f, 3f)
+            soundPlayer.playSound(event.entity, Sound.BLOCK_BELL_USE, CRIT_SOUND_VOLUME, CRIT_SOUND_PITCH)
         }
-        CriticalHitLabel(plugin).spawnAt(event.entity)
+        criticalHitLabelFactory.create().spawnAt(event.entity)
     }
 
     private fun isValidMarketGardenerHit(event: EntityDamageByEntityEvent): Boolean {
@@ -32,6 +34,8 @@ class MarketGardenerAttackEventHandler(private val plugin: Plugin) : Listener {
 
     private companion object {
         const val MIN_MARKET_GARDENING_VELOCITY = 0.75
+        const val CRIT_SOUND_VOLUME = 3f
+        const val CRIT_SOUND_PITCH = 3f
     }
 }
 

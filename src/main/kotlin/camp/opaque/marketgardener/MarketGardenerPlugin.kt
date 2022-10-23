@@ -4,7 +4,8 @@ import org.bukkit.plugin.java.JavaPlugin
 
 @Suppress("unused")
 class MarketGardenerPlugin : JavaPlugin() {
-    private val attackEventHandler = MarketGardenerAttackEventHandler(this)
+    private val attackEventHandler =
+        MarketGardenerAttackEventHandler(SoundPlayerImpl(), CriticalHitLabelFactoryImpl(this))
 
     override fun onEnable() {
         logger.info("Market Gardener: Starting up.")
