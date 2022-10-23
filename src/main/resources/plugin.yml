@@ -1,0 +1,6 @@
+name: MarketGardener
+version: 1.0.0
+main: camp.opaque.marketgardener.MarketGardenerPlugin
+api-version: 1.19
+author: Protocs
+description: Plugin featuring a Market Gardener enchantment for shovels. Just like good ol' TF2.
